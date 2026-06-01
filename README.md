@@ -83,6 +83,7 @@ content = build_human_message_content(
 uv sync --dev
 uv run ruff check .
 uv run pytest
+uv run python scripts/smoke.py
 ```
 
 ## License
