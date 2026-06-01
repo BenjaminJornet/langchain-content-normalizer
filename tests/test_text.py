@@ -38,6 +38,12 @@ def test_anthropic_text_blocks_are_concatenated_and_tool_use_is_skipped():
     assert extract_text_content(content) == "The file is ready."
 
 
+def test_text_blocks_can_use_separator():
+    content = [{"type": "text", "text": "one"}, {"type": "text", "text": "two"}]
+
+    assert extract_text_content(content, separator="\n") == "one\ntwo"
+
+
 def test_tool_use_can_be_included_explicitly():
     content = [{"type": "tool_use", "input": {"path": "app.py"}}]
 
@@ -48,6 +54,37 @@ def test_tool_result_nested_content_is_flattened():
     content = [{"type": "tool_result", "content": [{"type": "text", "text": "inner"}]}]
 
     assert extract_text_content(content) == "inner"
+
+
+def test_realistic_mcp_tool_result_fixture_is_flattened_with_separator():
+    content = [
+        {
+            "type": "tool_result",
+            "tool_use_id": "call_123",
+            "content": [
+                {"type": "text", "text": "stdout: service healthy"},
+                {"type": "text", "text": "stderr: "},
+            ],
+            "is_error": False,
+        }
+    ]
+
+    assert extract_text_content(content, separator="\n") == "stdout: service healthy\nstderr: "
+
+
+def test_anthropic_server_tool_result_fixture_preserves_text():
+    content = [
+        {"type": "text", "text": "I checked the host."},
+        {
+            "type": "tool_result",
+            "tool_use_id": "toolu_01",
+            "content": [{"type": "text", "text": "load average: 0.12"}],
+        },
+    ]
+
+    assert extract_text_content(content, separator="\n") == (
+        "I checked the host.\nload average: 0.12"
+    )
 
 
 def test_mcp_text_content_object_is_extracted():
@@ -102,3 +139,12 @@ def test_normalize_tool_output_truncates_large_payloads():
 
     assert result.startswith("x" * 10)
     assert "truncated 10 chars" in result
+
+
+def test_normalize_tool_output_accepts_separator():
+    result = normalize_tool_output(
+        [{"type": "text", "text": "line 1"}, {"type": "text", "text": "line 2"}],
+        separator="\n",
+    )
+
+    assert result == "line 1\nline 2"

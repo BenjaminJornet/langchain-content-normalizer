@@ -40,8 +40,9 @@ content = [
 
 assert extract_text_content(content) == "Reading logs..."
 assert "tail_logs" in extract_text_content(content, skip_tool_use=False)
+assert extract_text_content(content, separator="\n") == "Reading logs..."
 
-safe_output = normalize_tool_output(huge_tool_payload, max_chars=50_000)
+safe_output = normalize_tool_output(huge_tool_payload, max_chars=50_000, separator="\n")
 ```
 
 ## Vision format routing
@@ -73,7 +74,6 @@ content = build_human_message_content(
 
 ## Roadmap
 
-- Add more MCP fixture coverage.
 - Add provider-specific adapters as content formats evolve.
 - Keep runtime dependencies at zero.
 
