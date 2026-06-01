@@ -74,10 +74,22 @@ content = build_human_message_content(
 
 ## Roadmap
 
-- Add strict mode for unknown content blocks.
 - Add more MCP fixture coverage.
 - Add provider-specific adapters as content formats evolve.
 - Keep runtime dependencies at zero.
+
+## Strict mode
+
+By default, unknown non-empty content is preserved with `str(...)` so tool output is not silently lost. Use strict mode when unknown shapes should fail fast:
+
+```python
+from lc_content_normalizer import UnknownContentBlockError, extract_text_content
+
+try:
+    extract_text_content([{"type": "custom", "payload": "..."}], strict=True)
+except UnknownContentBlockError:
+    ...
+```
 
 ## Development
 
