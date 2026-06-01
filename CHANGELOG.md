@@ -2,8 +2,11 @@
 
 ## Unreleased
 
+## 0.1.2
+
 - Added maintainer documentation, release process, examples, and issue/PR templates.
 - Added build and manual publish workflows.
+- Added PyPI metadata, badges, and typed package marker.
 
 ## 0.1.0
 

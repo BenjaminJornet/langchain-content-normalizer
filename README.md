@@ -1,6 +1,8 @@
 # langchain-content-normalizer
 
 [![CI](https://github.com/BenjaminJornet/langchain-content-normalizer/actions/workflows/ci.yml/badge.svg)](https://github.com/BenjaminJornet/langchain-content-normalizer/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/langchain-content-normalizer.svg)](https://pypi.org/project/langchain-content-normalizer/)
+[![Downloads](https://static.pepy.tech/badge/langchain-content-normalizer/month)](https://pepy.tech/project/langchain-content-normalizer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 

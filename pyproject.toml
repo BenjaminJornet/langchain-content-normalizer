@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain-content-normalizer"
-version = "0.1.0"
+version = "0.1.2"
 description = "Normalize LangChain, MCP, and multimodal content blocks into provider-ready text and image payloads."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -25,6 +25,9 @@ dependencies = []
 [project.urls]
 Homepage = "https://github.com/benjaminjornet/langchain-content-normalizer"
 Issues = "https://github.com/benjaminjornet/langchain-content-normalizer/issues"
+Documentation = "https://github.com/BenjaminJornet/langchain-content-normalizer#readme"
+Changelog = "https://github.com/BenjaminJornet/langchain-content-normalizer/blob/main/CHANGELOG.md"
+PyPI = "https://pypi.org/project/langchain-content-normalizer/"
 
 [dependency-groups]
 dev = [
@@ -34,6 +37,7 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lc_content_normalizer"]
+artifacts = ["src/lc_content_normalizer/py.typed"]
 
 [tool.ruff]
 line-length = 100
