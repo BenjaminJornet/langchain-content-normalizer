@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from lc_content_normalizer import extract_text_content, normalize_tool_output
+import pytest
+
+from lc_content_normalizer import (
+    UnknownContentBlockError,
+    extract_text_content,
+    normalize_tool_output,
+)
 
 
 class FakeMessage:
@@ -68,6 +74,21 @@ def test_unknown_block_list_does_not_silently_disappear():
 
     assert "request_id" in result
     assert "hello" in result
+
+
+def test_strict_mode_raises_for_unknown_block_list():
+    with pytest.raises(UnknownContentBlockError):
+        extract_text_content([{"request_id": "abc", "message": "hello"}], strict=True)
+
+
+def test_strict_mode_raises_for_unknown_dict_block_type():
+    with pytest.raises(UnknownContentBlockError):
+        extract_text_content([{"type": "custom", "payload": "hello"}], strict=True)
+
+
+def test_strict_mode_raises_for_raw_dict_content():
+    with pytest.raises(UnknownContentBlockError):
+        extract_text_content({"status": "ok"}, strict=True)
 
 
 def test_image_blocks_are_dropped():

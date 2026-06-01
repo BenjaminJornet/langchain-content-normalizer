@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added strict mode for unknown content blocks.
+
 ## 0.1.2
 
 - Added maintainer documentation, release process, examples, and issue/PR templates.

@@ -3,13 +3,23 @@ from __future__ import annotations
 from typing import Any
 
 
-def extract_text_content(content: Any, *, skip_tool_use: bool = True) -> str:
+class UnknownContentBlockError(ValueError):
+    """Raised when strict mode cannot normalize an unknown content block."""
+
+
+def extract_text_content(
+    content: Any,
+    *,
+    skip_tool_use: bool = True,
+    strict: bool = False,
+) -> str:
     """Normalize LangChain, Anthropic, and MCP content shapes to plain text.
 
     Supported inputs include strings, Anthropic-style content block lists,
     MCP TextContent-like objects exposing ``.text``, and message-like objects
     exposing ``.content``. Unknown non-empty block lists fall back to ``str`` so
-    tool outputs are not silently lost.
+    tool outputs are not silently lost. Set ``strict=True`` to raise
+    ``UnknownContentBlockError`` instead of falling back.
     """
     if content is None:
         return ""
@@ -39,6 +49,8 @@ def extract_text_content(content: Any, *, skip_tool_use: bool = True) -> str:
                         parts.append(str(block.get("input", "")))
                 elif block_type in {"image", "image_url"}:
                     saw_known_block = True
+                elif strict:
+                    raise UnknownContentBlockError(f"Unknown content block type: {block_type!r}")
                 continue
 
             text_attr = getattr(block, "text", None)
@@ -51,23 +63,27 @@ def extract_text_content(content: Any, *, skip_tool_use: bool = True) -> str:
 
         result = "".join(parts)
         if not result and content and not saw_known_block:
+            if strict:
+                raise UnknownContentBlockError("Unknown content block list")
             return str(content)
         return result
 
     inner = getattr(content, "content", None)
     if inner is not None and inner is not content:
-        return extract_text_content(inner, skip_tool_use=skip_tool_use)
+        return extract_text_content(inner, skip_tool_use=skip_tool_use, strict=strict)
 
     text_attr = getattr(content, "text", None)
     if isinstance(text_attr, str):
         return text_attr
 
+    if strict and isinstance(content, dict):
+        raise UnknownContentBlockError("Unknown dict content")
     return str(content)
 
 
-def normalize_tool_output(raw: Any, *, max_chars: int = 50_000) -> str:
+def normalize_tool_output(raw: Any, *, max_chars: int = 50_000, strict: bool = False) -> str:
     """Extract a readable tool output string and truncate oversized payloads."""
-    text = extract_text_content(raw)
+    text = extract_text_content(raw, strict=strict)
     if len(text) <= max_chars:
         return text
     omitted = len(text) - max_chars
