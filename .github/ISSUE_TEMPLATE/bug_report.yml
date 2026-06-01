@@ -1,0 +1,30 @@
+name: Bug report
+description: Report incorrect content normalization behavior.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: input
+    attributes:
+      label: Input content shape
+      description: Paste the minimal content shape that fails.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.0

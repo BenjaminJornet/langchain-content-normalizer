@@ -1,5 +1,9 @@
 # langchain-content-normalizer
 
+[![CI](https://github.com/BenjaminJornet/langchain-content-normalizer/actions/workflows/ci.yml/badge.svg)](https://github.com/BenjaminJornet/langchain-content-normalizer/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
+
 Normalize the messy content shapes produced by LangChain, MCP tools, Anthropic content blocks, and multimodal chat APIs.
 
 The package has no runtime dependencies. It works by duck typing instead of importing LangChain or MCP classes.
@@ -60,6 +64,18 @@ content = build_human_message_content(
 | `ollama` + `llava`/`vision` model name | OpenAI-compatible `image_url` block |
 | `ollama` text-only model | `none`, images are dropped |
 | OpenAI-compatible providers | OpenAI-compatible `image_url` block |
+
+## Examples
+
+- `examples/normalize_mcp_output.py` shows how MCP-style tool results are flattened.
+- `examples/build_vision_content.py` shows provider-aware image block generation.
+
+## Roadmap
+
+- Add strict mode for unknown content blocks.
+- Add more MCP fixture coverage.
+- Add provider-specific adapters as content formats evolve.
+- Keep runtime dependencies at zero.
 
 ## Development
 
