@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.3
+
 - Added strict mode for unknown content blocks.
 
 ## 0.1.2
