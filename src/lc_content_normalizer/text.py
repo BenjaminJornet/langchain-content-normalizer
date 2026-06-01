@@ -12,6 +12,7 @@ def extract_text_content(
     *,
     skip_tool_use: bool = True,
     strict: bool = False,
+    separator: str = "",
 ) -> str:
     """Normalize LangChain, Anthropic, and MCP content shapes to plain text.
 
@@ -40,7 +41,12 @@ def extract_text_content(
                     saw_known_block = True
                 elif block_type == "tool_result":
                     parts.append(
-                        extract_text_content(block.get("content", ""), skip_tool_use=skip_tool_use)
+                        extract_text_content(
+                            block.get("content", ""),
+                            skip_tool_use=skip_tool_use,
+                            strict=strict,
+                            separator=separator,
+                        )
                     )
                     saw_known_block = True
                 elif block_type == "tool_use":
@@ -61,7 +67,7 @@ def extract_text_content(
 
             parts.append(str(block))
 
-        result = "".join(parts)
+        result = separator.join(parts)
         if not result and content and not saw_known_block:
             if strict:
                 raise UnknownContentBlockError("Unknown content block list")
@@ -70,7 +76,12 @@ def extract_text_content(
 
     inner = getattr(content, "content", None)
     if inner is not None and inner is not content:
-        return extract_text_content(inner, skip_tool_use=skip_tool_use, strict=strict)
+        return extract_text_content(
+            inner,
+            skip_tool_use=skip_tool_use,
+            strict=strict,
+            separator=separator,
+        )
 
     text_attr = getattr(content, "text", None)
     if isinstance(text_attr, str):
@@ -81,9 +92,15 @@ def extract_text_content(
     return str(content)
 
 
-def normalize_tool_output(raw: Any, *, max_chars: int = 50_000, strict: bool = False) -> str:
+def normalize_tool_output(
+    raw: Any,
+    *,
+    max_chars: int = 50_000,
+    strict: bool = False,
+    separator: str = "",
+) -> str:
     """Extract a readable tool output string and truncate oversized payloads."""
-    text = extract_text_content(raw, strict=strict)
+    text = extract_text_content(raw, strict=strict, separator=separator)
     if len(text) <= max_chars:
         return text
     omitted = len(text) - max_chars
