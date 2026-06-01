@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.5
+
 - Added realistic MCP fixture coverage and configurable text block separators.
 
 ## 0.1.4
