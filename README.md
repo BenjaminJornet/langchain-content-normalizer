@@ -63,7 +63,7 @@ content = build_human_message_content(
 | Provider/model | Format |
 | --- | --- |
 | `anthropic` | native Anthropic `image` block with `source.base64` |
-| `ollama` + `llava`/`vision` model name | OpenAI-compatible `image_url` block |
+| `ollama` + known vision model marker (`llava`, `bakllava`, `moondream`, `minicpm-v`, `qwen2-vl`, `llama3.2-vision`, `vision`) | OpenAI-compatible `image_url` block |
 | `ollama` text-only model | `none`, images are dropped |
 | OpenAI-compatible providers | OpenAI-compatible `image_url` block |
 

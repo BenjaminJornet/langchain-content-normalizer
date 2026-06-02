@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from lc_content_normalizer import (
     VISION_FORMAT_ANTHROPIC_NATIVE,
     VISION_FORMAT_NONE,
@@ -16,9 +18,20 @@ def test_detect_vision_format_anthropic_native():
     assert detect_vision_format("anthropic", "claude-3-5-sonnet") == VISION_FORMAT_ANTHROPIC_NATIVE
 
 
-def test_detect_vision_format_ollama_vision_models_use_openai_blocks():
-    assert detect_vision_format("ollama", "llava:13b") == VISION_FORMAT_OPENAI
-    assert detect_vision_format("ollama", "model-with-vision") == VISION_FORMAT_OPENAI
+@pytest.mark.parametrize(
+    "model",
+    [
+        "bakllava:latest",
+        "llava:13b",
+        "llama3.2-vision:11b",
+        "minicpm-v:8b",
+        "moondream:latest",
+        "qwen2-vl:7b",
+        "model-with-vision",
+    ],
+)
+def test_detect_vision_format_ollama_vision_models_use_openai_blocks(model):
+    assert detect_vision_format("ollama", model) == VISION_FORMAT_OPENAI
 
 
 def test_detect_vision_format_ollama_text_only():

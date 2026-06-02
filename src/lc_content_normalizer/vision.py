@@ -6,6 +6,16 @@ VISION_FORMAT_OPENAI = "openai"
 VISION_FORMAT_ANTHROPIC_NATIVE = "anthropic_native"
 VISION_FORMAT_NONE = "none"
 
+OLLAMA_VISION_MODEL_MARKERS = (
+    "bakllava",
+    "llava",
+    "llama3.2-vision",
+    "minicpm-v",
+    "moondream",
+    "qwen2-vl",
+    "vision",
+)
+
 
 def detect_vision_format(provider: str, model: str) -> str:
     """Pick the multimodal block format expected by a provider/model pair."""
@@ -15,7 +25,7 @@ def detect_vision_format(provider: str, model: str) -> str:
     if provider_name == "anthropic":
         return VISION_FORMAT_ANTHROPIC_NATIVE
     if provider_name == "ollama":
-        if "llava" in model_name or "vision" in model_name:
+        if any(marker in model_name for marker in OLLAMA_VISION_MODEL_MARKERS):
             return VISION_FORMAT_OPENAI
         return VISION_FORMAT_NONE
     return VISION_FORMAT_OPENAI
