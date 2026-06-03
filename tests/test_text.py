@@ -87,6 +87,26 @@ def test_anthropic_server_tool_result_fixture_preserves_text():
     )
 
 
+def test_openai_responses_output_text_fixture_is_preserved():
+    content = [
+        {"type": "output_text", "text": "The deployment is healthy."},
+        {"type": "output_text", "text": "No action required."},
+    ]
+
+    assert extract_text_content(content, separator="\n") == (
+        "The deployment is healthy.\nNo action required."
+    )
+
+
+def test_openai_responses_input_text_fixture_is_preserved():
+    content = [
+        {"type": "input_text", "text": "Summarize this incident."},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,abc"}},
+    ]
+
+    assert extract_text_content(content) == "Summarize this incident."
+
+
 def test_mcp_text_content_object_is_extracted():
     assert extract_text_content(FakeTextContent("from MCP")) == "from MCP"
 

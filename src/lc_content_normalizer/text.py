@@ -36,7 +36,9 @@ def extract_text_content(
                 continue
             if isinstance(block, dict):
                 block_type = block.get("type")
-                if block_type == "text" and isinstance(block.get("text"), str):
+                if block_type in {"input_text", "output_text", "text"} and isinstance(
+                    block.get("text"), str
+                ):
                     parts.append(block["text"])
                     saw_known_block = True
                 elif block_type == "tool_result":
