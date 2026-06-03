@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.1.8
+
+- Added explicit OpenAI Responses-style `input_text` and `output_text` fixture coverage.
+- Documented OpenAI Responses text block normalization in the README.
+
 ## 0.1.7
 
 - Updated GitHub Actions workflow versions where newer majors are resolvable.
