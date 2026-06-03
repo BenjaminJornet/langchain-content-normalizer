@@ -17,6 +17,7 @@ LLM agent stacks often receive content as one of many incompatible shapes:
 | --- | --- | --- |
 | Classic chat | `"plain text"` | `"plain text"` |
 | Anthropic blocks | `[{"type": "text", "text": "hi"}]` | `"hi"` |
+| OpenAI Responses text | `[{"type": "output_text", "text": "hi"}]` | `"hi"` |
 | Tool calls | `[{"type": "tool_use", ...}]` | skipped by default |
 | MCP tool results | `[{"type": "tool_result", "content": [...]}]` | flattened text |
 | MCP objects | objects exposing `.text` | extracted text |
